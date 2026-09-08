@@ -60,6 +60,11 @@ export const containerPadding = style({
 export const gridHeader = style({
   paddingBottom: '12rem',
   position: 'relative',
+  '@media': {
+    '(max-width: 768px)': {
+      paddingBottom: '5rem',
+    },
+  },
 })
 
 export const gridTitle = style({
