@@ -22,6 +22,11 @@ globalStyle('body', {
   transition: 'background-color 0.2s ease, color 0.2s ease',
 })
 
+globalStyle('::selection', {
+  backgroundColor: vars.color.selectionBg,
+  color: vars.color.selectionText,
+})
+
 globalStyle('a', {
   color: 'inherit',
   textDecoration: 'none',

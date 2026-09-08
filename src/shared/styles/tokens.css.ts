@@ -8,6 +8,8 @@ export const vars = createThemeContract({
     dark: null,
     white: null,
     nameText: null,
+    selectionBg: null,
+    selectionText: null,
     navbarBg: null,
     semantic: {
       problem: null,
@@ -189,6 +191,8 @@ createGlobalTheme(':root', vars, {
     dark: '#111111',
     white: '#ffffff',
     nameText: '#e5fff3',
+    selectionBg: '#ffc62f',
+    selectionText: '#111111',
     navbarBg: 'rgba(243, 244, 246, 0.85)',
     semantic: {
       problem: '#e05252',
@@ -220,6 +224,8 @@ createGlobalTheme('[data-theme="dark"]', vars, {
     dark: '#f0f0f0',
     white: '#242424',
     nameText: '#001813',
+    selectionBg: '#ffc62f',
+    selectionText: '#111111',
     navbarBg: 'rgba(28, 28, 28, 0.85)',
     semantic: {
       problem: '#f87171',
