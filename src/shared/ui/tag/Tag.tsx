@@ -8,8 +8,8 @@ export type TagProps = HTMLAttributes<HTMLSpanElement> & {
   className?: string
 }
 
-export const Tag = ({ children, className, variant: _variant, ...props }: TagProps) => (
-  <span className={className} {...props}>
+export const Tag = ({ children, className, variant, ...props }: TagProps) => (
+  <span className={className} data-variant={variant} {...props}>
     {children}
   </span>
 )
