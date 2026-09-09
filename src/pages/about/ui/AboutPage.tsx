@@ -1,17 +1,38 @@
+import { useEffect, useState, type AnimationEvent } from 'react'
 import { useLanguage } from '../../../shared/i18n'
 import * as s from './about.css'
+
+// Coin flip plays only on the first render of this page per full page load.
+let hasFlipped = false
 
 export const AboutPage = () => {
   const { t } = useLanguage()
   const a = t.about
+  const [shouldFlip] = useState(() => !hasFlipped)
+  useEffect(() => {
+    hasFlipped = true
+  }, [])
+
+  // Hover turntable is enabled only after the intro flip has settled face-front.
+  const [flipDone, setFlipDone] = useState(!shouldFlip)
+  const handleFlipEnd = (e: AnimationEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) setFlipDone(true)
+  }
 
   return (
     <main className={s.page}>
       <div className={`${s.container} ${s.containerPadding}`}>
         <header className={s.gridHeader}>
           <h1 className={s.gridTitle}>{a.pageTitle}</h1>
-          <div className={s.portrait}>
-            <img src="/kermit-pixel.png" alt="Kermit portrait" className={s.portraitImg} />
+          <div className={`${s.portraitWrap} ${flipDone ? s.portraitWrapReady : ''}`}>
+            <div className={`${s.coin} ${shouldFlip ? s.coinFlip : ''}`} onAnimationEnd={handleFlipEnd}>
+              <div className={s.coinFront}>
+                <img src="/kermit-pixel.png" alt="Kermit portrait" className={s.portraitImg} />
+              </div>
+              <div className={s.coinBack} aria-hidden="true">
+                <span className={s.coinBackMark}>W</span>
+              </div>
+            </div>
           </div>
         </header>
 

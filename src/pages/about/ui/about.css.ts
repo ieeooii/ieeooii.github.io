@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css'
+import { keyframes, style } from '@vanilla-extract/css'
 import { vars } from '../../../shared/styles/tokens.css'
 
 export { container } from '../../../shared/styles/layout.css'
@@ -9,24 +9,16 @@ export const page = style({
   position: 'relative',
 })
 
-// ── Portrait ──────────────────────────────────────────────────────────────────
+// ── Portrait (coin flip on first render) ──────────────────────────────────────
 
-export const portrait = style({
+export const portraitWrap = style({
   position: 'absolute',
   top: '50%',
   right: 0,
   transform: 'translateY(-50%)',
   width: 'min(320px, 60vw)',
   aspectRatio: '1',
-  borderRadius: vars.radii.full,
-  overflow: 'hidden',
-  '::after': {
-    content: '""',
-    position: 'absolute',
-    inset: 0,
-    backgroundImage: `repeating-linear-gradient(0deg, ${vars.color.gray[100]} 0 1px, transparent 1px 5px), repeating-linear-gradient(90deg, ${vars.color.gray[100]} 0 1px, transparent 1px 5px)`,
-    pointerEvents: 'none',
-  },
+  perspective: '1200px',
   '@media': {
     '(max-width: 768px)': {
       position: 'relative',
@@ -38,11 +30,107 @@ export const portrait = style({
   },
 })
 
+// 5 full turns with a strong ease-out: fast at first, slowing down to settle on the front face.
+// Applied once the intro flip has finished; gates the hover turntable and pointer cursor.
+export const portraitWrapReady = style({
+  '@media': {
+    '(hover: hover)': {
+      cursor: 'pointer',
+    },
+  },
+})
+
+const flip = keyframes({
+  from: { transform: 'rotateY(0deg)' },
+  to: { transform: 'rotateY(1800deg)' },
+})
+
+export const coin = style({
+  position: 'relative',
+  width: '100%',
+  height: '100%',
+  transformStyle: 'preserve-3d',
+})
+
+export const coinFlip = style({
+  animation: `${flip} 3s cubic-bezier(0.1, 0.8, 0.2, 1) 300ms both`,
+  '@media': {
+    '(prefers-reduced-motion: reduce)': {
+      animation: 'none',
+    },
+  },
+})
+
+const coinFace = style({
+  position: 'absolute',
+  inset: 0,
+  borderRadius: vars.radii.full,
+  backfaceVisibility: 'hidden',
+  '::after': {
+    content: '""',
+    position: 'absolute',
+    inset: 0,
+    borderRadius: vars.radii.full,
+    backgroundImage: `repeating-linear-gradient(0deg, ${vars.color.gray[100]} 0 1px, transparent 1px 5px), repeating-linear-gradient(90deg, ${vars.color.gray[100]} 0 1px, transparent 1px 5px)`,
+    pointerEvents: 'none',
+  },
+})
+
+export const coinFront = style([coinFace])
+
+export const coinBack = style([
+  coinFace,
+  {
+    transform: 'rotateY(180deg)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: vars.color.selectionBg,
+    userSelect: 'none',
+  },
+])
+
+export const coinBackMark = style({
+  // Above the grid overlay (::after) so the mark stays crisp.
+  position: 'relative',
+  zIndex: 1,
+  // Follows the theme: white in light mode, dark in dark mode.
+  color: vars.color.white,
+  // Cormorant Garamond Light, subset to "W" via the Google Fonts link in index.html.
+  // Its cap height is lower than Inter's, so the size is bumped to keep the same visual scale.
+  fontFamily: "'Cormorant Garamond', Georgia, serif",
+  fontSize: 'clamp(7.5rem, 23vw, 11.75rem)',
+  fontWeight: 300,
+  lineHeight: 1,
+})
+
+// Turntable: only the image spins while hovered; the grid overlay stays fixed like a platter mat.
+const spin = keyframes({
+  from: { transform: 'rotate(0deg)' },
+  to: { transform: 'rotate(360deg)' },
+})
+
 export const portraitImg = style({
+  display: 'block',
   width: '100%',
   height: '100%',
   objectFit: 'cover',
+  borderRadius: vars.radii.full,
   imageRendering: 'pixelated',
+  animation: `${spin} 4s linear infinite`,
+  animationPlayState: 'paused',
+  '@media': {
+    '(hover: hover)': {
+      selectors: {
+        [`${portraitWrapReady}:hover &`]: {
+          animationPlayState: 'running',
+        },
+      },
+    },
+    '(prefers-reduced-motion: reduce)': {
+      animation: 'none',
+    },
+  },
 })
 
 export const containerPadding = style({
