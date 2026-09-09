@@ -39,6 +39,14 @@ export const ProjectDetailPage = () => {
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[rehypeRaw]}
             components={{
+              // Markdown wraps images in <p>, but <figure> is not allowed inside <p>.
+              // Unwrap paragraphs that contain only images so the figure renders at block level.
+              p: ({ node, children, ...props }) => {
+                const onlyImages = node?.children.every(
+                  (c) => (c.type === 'element' && c.tagName === 'img') || (c.type === 'text' && c.value.trim() === ''),
+                )
+                return onlyImages ? <>{children}</> : <p {...props}>{children}</p>
+              },
               img: ({ src, alt }) => (
                 <figure className={s.figure}>
                   <img src={src} alt={alt} className={s.figureImg} />
