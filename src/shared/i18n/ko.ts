@@ -48,7 +48,7 @@ export const ko: Translations = {
     },
     sectionEdu: 'Education',
     edu1: {
-      title: '한양대학교 대학원 공학석사',
+      title: '한양대학교 공학대학원 석사',
       sub: '컴퓨터공학 전공 · GPA 4.17 / 4.5',
       date: '2025년 8월',
     },

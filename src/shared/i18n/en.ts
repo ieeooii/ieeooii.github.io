@@ -50,7 +50,7 @@ export const en: Translations = {
     },
     sectionEdu: 'Education',
     edu1: {
-      title: 'Hanyang University, M.Eng. in Computer Science',
+      title: 'Hanyang University, Graduate School of Engineering, M.Eng.',
       sub: 'Computer Science · GPA 4.17 / 4.5',
       date: 'August 2025',
     },
